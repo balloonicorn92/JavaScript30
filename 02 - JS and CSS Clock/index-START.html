@@ -62,12 +62,43 @@
       background: black;
       position: absolute;
       top: 50%;
+      transform-origin: 100%; /*by default it is on 50% :: this will let it from its x-axxis so pivot point is on the right*/ 
+      transform: rotate(90deg); /*make sure hands start at 12*/
+      transition: all 0.5s;
+      transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
     }
 
   </style>
 
   <script>
+    //lets create a function that updates the hands as time passes
+    //grav the first hand
+    const hourHand = document.querySelector('.hour-hand')
+    // grab the minute hand
+    const minHand = document.querySelector('.min-hand')
+    //we grab the second hand from the the HTML page
+    const secondHand = document.querySelector('.second-hand')
+    //first a function that updates de seconds hand as it updates the most often
+    function setDate() {
+      //new date built in fucntion get us this object: "2022-03-11T18:17:25.740Z"
+     const now = new Date()
+     //from that object we get just the seconds, minutes and hour
+     const seconds = now.getSeconds()
+     const minutes = now.getMinutes()
+     const hour = now .getHours()
+     // now we have to turn seconds into degrees....
+     const secondsDegrees = ((seconds / 60) * 360) + 90
+     const hourDegrees = ((hour / 12) * 360) + 90
+     const minDegrees = ((minutes / 60) * 360) +90
+     
+     //we grab the second hand and apply styles to it 
+     secondHand.style.transform = `rotate(${secondsDegrees}deg)`
+     hourHand.style.transform = `rotate(${hourDegrees}deg)`
+     minHand.style.transform = `rotate(${minDegrees}deg)`
+    }
 
+    //here we have this function run every 1000 miliseconds (aka every second)
+    setInterval(setDate, 1000)
 
   </script>
 </body>

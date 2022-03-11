@@ -59,6 +59,31 @@
 
 <script>
 
+ function playSound (e) {
+  //We are creating a new vairable so when we press a keyboard we can get the corresponding data-key
+  //we are using template literals-- which means we are targeting a CSS variable depending on what we press
+  const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`)
+  //select the key div that was pressed so we can play animation
+  const key = document.querySelector(`.key[data-key="${e.keyCode}"`)
+  if(!audio) return; //stop the function if the response is null (aka we press a letter without a keycode)
+  audio.currentTime = 0 //rewind the audio to the start if pressed before it finished
+  audio.play()
+  //add the class for the highlight box
+  key.classList.add('playing')
+  //use a transition end event so the highlight goes away after it plays
+ }
+
+ function removeTransition(e){
+   if(e.propertyName !== 'transform') return; //skip it if it is not a transform (transition)
+    //  console.log(this) if you need to know what this is... here this is what it the function was called against
+    //if you look at the event listener that this function was called on you will see that this was called against the key press which would be the key-code
+   this.classList.remove('playing')
+  }
+// you create an event listen for an event (click on the keyboard) on the element that you are listening on (right now the window)so the corresponding sound plays
+ window.addEventListener('keydown', playSound);
+ const keys = document.querySelectorAll('.key')
+ keys.forEach(key => key.addEventListener('transitionend', removeTransition))
+
 </script>
 
 
